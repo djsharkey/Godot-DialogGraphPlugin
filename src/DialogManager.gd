@@ -21,7 +21,7 @@ func parse_dialog_data():
 		var data = parse_json(file.get_as_text())
 		file.close()
 		for graph_node in data["nodes"]:
-			#var instance = load("res://addons/dialog_graph/" + data["nodes"][graph_node]["type"]).instance()
+			#var instance = load("res://addons/Godot-DialogGraphPlugin/src/" + data["nodes"][graph_node]["type"]).instance()
 			match data["nodes"][graph_node]["type"]:
 				"Conversation": create_conversation(data, graph_node)
 				"Speech": create_speech(data, graph_node)

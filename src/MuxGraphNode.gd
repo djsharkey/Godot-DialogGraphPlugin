@@ -1,5 +1,5 @@
 tool
-extends "res://addons/dialog_graph/GraphNode.gd"
+extends "res://addons/Godot-DialogGraphPlugin/src/GraphNode.gd"
 
 func set_node_line(node_line):
 	node_line.set_label("Input " + String(node_lines.size()))

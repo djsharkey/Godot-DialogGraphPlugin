@@ -1,4 +1,4 @@
-# [![Plugin icon](/addons/dialog_graph/icon.png)](https://github.com/ejnij/Godot-DialogGraphPlugin) Dialog Graph Plugin for Godot
+# [![Plugin icon](/addons/Godot-DialogGraphPlugin/src/icon.png)](https://github.com/ejnij/Godot-DialogGraphPlugin) Dialog Graph Plugin for Godot
 I needed an easy way to create dialogs for my game. What I needed wasn't that complex, but I did a bit extra for future-proofing.
 This is the result - a simple plugin that lets you create dialog graphs.
 
@@ -6,8 +6,9 @@ This is the result - a simple plugin that lets you create dialog graphs.
        I might add some basic example for reference if need be.
 
 ## Installation
-1) Place the 'addons' folder in your project folder.
-2) In the editor - Project -> Project Settings -> Plugins -> Change the status to 'Active'.
+1) Create an 'addons' folder in your project folder if one doesn't already exist.
+2) Clone repository under 'addons' folder
+3) In the editor - Project -> Project Settings -> Plugins -> Change the status to 'Active'.
 
 *Note: the Graph Editor is on the bottom of Godot's editor, next to the Animation tab. It appears when a Manager node is selected.
 

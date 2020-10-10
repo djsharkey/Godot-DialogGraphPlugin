@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://addons/dialog_graph/GraphNode.gd" type="Script" id=1]
-[ext_resource path="res://addons/dialog_graph/GraphNodeLine.tscn" type="PackedScene" id=2]
-[ext_resource path="res://addons/dialog_graph/GraphNodeLineCount.tscn" type="PackedScene" id=3]
+[ext_resource path="res://addons/Godot-DialogGraphPlugin/src/GraphNode.gd" type="Script" id=1]
+[ext_resource path="res://addons/Godot-DialogGraphPlugin/src/GraphNodeLine.tscn" type="PackedScene" id=2]
+[ext_resource path="res://addons/Godot-DialogGraphPlugin/src/GraphNodeLineCount.tscn" type="PackedScene" id=3]
 
 [node name="GraphNode" type="GraphNode"]
 anchor_left = 0.0
