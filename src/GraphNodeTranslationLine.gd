@@ -9,9 +9,6 @@ func _ready():
 func get_data():
 	return {"Dialog": $NodeLine1.get_data(), "Translation": $NodeLine2.get_data()}
 
-func get_export_data():
-	return $NodeLine1.get_export_data()
-
 func set_data(data):
 	$NodeLine1.set_data(data["Dialog"])
 	$NodeLine2.set_data(data["Translation"])

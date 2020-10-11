@@ -10,9 +10,6 @@ func _ready():
 func get_data():
 	return get_line()
 
-func get_export_data():
-	return get_data()
-
 func set_data(data):
 	set_line(data)
 

@@ -52,7 +52,7 @@ To inform it when a choice was chosen, you can use choice_picked(choice_index).
 1. Translation being entered doesn't automatically scale the nodes. It does update when you Load though.
 2. The code for the Manager node is pretty hack-y and not OO-y. Might change that later.
 3. Graph validity isn't reinforced, so some stuff you can get away with while exporting, that would crash the Manager node.
-4. File dialogs require pressing the "Save/Load" button at the end. Adding ".json" is also needed, and there might be an overwrite message for no reason as well.
+4. File dialogs require pressing the "Save/Load" button at the end and there might be an overwrite message for no reason as well.
 
 ### Fixed
 1. Editor tab doesn't align with other tabs, and starts at 0 height.

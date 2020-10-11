@@ -262,29 +262,6 @@ text = "Clear"
 flat = false
 align = 1
 
-[node name="Export" type="Button" parent="Panel/Margin/VBox/HBox/HBox"]
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = 99.0
-margin_right = 151.0
-margin_bottom = 20.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-toggle_mode = false
-enabled_focus_mode = 2
-shortcut = null
-group = null
-text = "Export"
-flat = false
-align = 1
-
 [node name="Save" type="Button" parent="Panel/Margin/VBox/HBox/HBox"]
 anchor_left = 0.0
 anchor_top = 0.0
@@ -368,37 +345,6 @@ current_dir = "res://"
 current_file = ""
 current_path = "res://"
 _sections_unfolded = [ "filters" ]
-
-[node name="ExportWindow" type="FileDialog" parent="."]
-visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -199.5
-margin_top = -130.5
-margin_right = 199.5
-margin_bottom = 130.5
-rect_min_size = Vector2( 200, 70 )
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-popup_exclusive = true
-window_title = "Export Dialog Graph"
-resizable = true
-dialog_hide_on_ok = false
-mode_overrides_title = false
-mode = 4
-access = 0
-filters = PoolStringArray( "*.json ; JSON file" )
-show_hidden_files = false
-current_dir = "res://"
-current_file = ""
-current_path = "res://"
-_sections_unfolded = [ "Margin", "Popup", "filters" ]
 
 [node name="LoadWindow" type="FileDialog" parent="."]
 visible = false
@@ -486,10 +432,8 @@ _sections_unfolded = [ "Dialog" ]
 [connection signal="pressed" from="Panel/Margin/VBox/HBox/Mux" to="." method="_on_Mux_pressed"]
 [connection signal="pressed" from="Panel/Margin/VBox/HBox/Jump" to="." method="_on_Jump_pressed"]
 [connection signal="pressed" from="Panel/Margin/VBox/HBox/HBox/Clear" to="." method="_on_Clear_pressed"]
-[connection signal="pressed" from="Panel/Margin/VBox/HBox/HBox/Export" to="." method="_on_Export_pressed"]
 [connection signal="pressed" from="Panel/Margin/VBox/HBox/HBox/Save" to="." method="_on_Save_pressed"]
 [connection signal="pressed" from="Panel/Margin/VBox/HBox/HBox/Load" to="." method="_on_Load_pressed"]
 [connection signal="confirmed" from="SaveWindow" to="." method="_on_SaveWindow_confirmed"]
-[connection signal="confirmed" from="ExportWindow" to="." method="_on_ExportWindow_confirmed"]
 [connection signal="confirmed" from="LoadWindow" to="." method="_on_LoadWindow_confirmed"]
 [connection signal="confirmed" from="ClearWindow" to="." method="_on_ClearWindow_confirmed"]

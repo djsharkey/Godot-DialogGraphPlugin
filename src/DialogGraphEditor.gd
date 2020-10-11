@@ -35,20 +35,10 @@ func get_data():
 	var data = {}
 	data["connections"] = graph.get_connection_list()
 	data["sc"] = graph.connections
-	if graph.default_conversation:
-		data["default_conversation"] = graph.default_conversation.get_name()
-	data["nodes"] = {}
-	for child in graph.nodes:
-		data["nodes"][child.get_name()] = child.get_data()
-	return data
-
-func get_export_data():
-	var data = {}
-	data["sc"] = graph.connections
 	data["default_conversation"] = graph.default_conversation.get_name()
 	data["nodes"] = {}
 	for child in graph.nodes:
-		data["nodes"][child.get_name()] = child.get_export_data()
+		data["nodes"][child.get_name()] = child.get_data()
 	return data
 
 func set_data(data):
@@ -76,29 +66,25 @@ func set_data(data):
 		graph.default_conversation.turn_on()
 
 func _on_Save_pressed():
-	$SaveWindow.popup()
-
-func _on_SaveWindow_confirmed():
-	var file_name = $SaveWindow.current_file
-	var file = File.new()
-	file.open(file_name, File.WRITE)
-	file.store_string(to_json(get_data()))
-	file.close()
-	$SaveWindow.hide()
-
-func _on_Export_pressed():
 	if graph.default_conversation:
-		$ExportWindow.popup()
+		$SaveWindow.popup()
 	else:
 		$DefaultWindow.popup()
 
-func _on_ExportWindow_confirmed():
-	var file_name = $ExportWindow.current_file
+func _on_SaveWindow_confirmed():
+	var file_path = $SaveWindow.current_path
+	update_json_file(file_path, get_data())
+	$SaveWindow.hide()
+
+func update_json_file(file_path, data):
+	var s = file_path.split(".", true)
+	var provided_ext = s[s.size() - 1]
+	if provided_ext != "json":
+		file_path += ".json"
 	var file = File.new()
-	file.open(file_name, File.WRITE)
-	file.store_string(to_json(get_export_data()))
+	file.open(file_path, File.WRITE) 
+	file.store_string(to_json(data))
 	file.close()
-	$ExportWindow.hide()
 
 func _on_Load_pressed():
 	$LoadWindow.popup()

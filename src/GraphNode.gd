@@ -29,12 +29,16 @@ func _on_Minus_pressed():
 	change_node_lines_amount(-1)
 
 func get_data():
-	var data = {}
-	data["type"] = title
-	data["rect_x"] = rect_size.x
-	data["rect_y"] = rect_size.y
-	data["offset_x"] = offset.x
-	data["offset_y"] = offset.y
+	var data = {
+		"type": title,
+		"editor_data": {
+			"rect_x": rect_size.x,
+			"rect_y": rect_size.y,
+			"offset_x": offset.x,
+			"offset_y": offset.y,
+		},
+	}
+	
 	if $NodeLineCount.visible:
 		data["Size"] = node_lines.size()
 	for i in range(0,node_lines.size()):
@@ -42,19 +46,10 @@ func get_data():
 			data["Line"+String(i)] = node_lines[i].get_data()
 	return data
 
-func get_export_data():
-	var data = {}
-	data["type"] = title
-	if $NodeLineCount.visible:
-		data["Size"] = node_lines.size()
-	for i in range(0,node_lines.size()):
-		if node_lines[i].is_line_visible():
-			data["Line"+String(i)] = node_lines[i].get_export_data()
-	return data
-
 func set_data(data):
-	rect_size = Vector2(data["rect_x"], data["rect_y"])
-	offset = Vector2(data["offset_x"], data["offset_y"])
+	var editor_data = data["editor_data"]
+	rect_size = Vector2(editor_data["rect_x"], editor_data["rect_y"])
+	offset = Vector2(editor_data["offset_x"], editor_data["offset_y"])
 	if $NodeLineCount.visible:
 		change_node_lines_amount(data["Size"]-start_amount)
 	for i in range(0,node_lines.size()):
