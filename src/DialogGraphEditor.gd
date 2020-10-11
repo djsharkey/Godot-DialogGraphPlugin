@@ -7,11 +7,19 @@ var choice_node = preload("ChoiceGraphNode.tscn")
 var condition_node = preload("ConditionGraphNode.tscn")
 var mux_node = preload("MuxGraphNode.tscn")
 var jump_node = preload("JumpGraphNode.tscn")
+var manager_ref
 var graph
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	graph = $Panel/Margin/VBox/DialogGraph
+
+func set_manager_ref(manager_node):
+	# Avoid reloading if we previously loaded this file
+	if manager_node == manager_ref:
+		return
+	manager_ref = manager_node
+	load_file(manager_node.dialog_file)
 
 func _on_Conversation_pressed():
 	graph.create_node(conversation_node)
@@ -90,14 +98,21 @@ func _on_Load_pressed():
 	$LoadWindow.popup()
 
 func _on_LoadWindow_confirmed():
+	var file_path = $LoadWindow.current_path
+	load_file(file_path)
+	$LoadWindow.hide()
+
+func load_file(file_path):
 	graph.clear_graph()
-	var file_name = $LoadWindow.current_file
+
 	var file = File.new()
-	file.open(file_name, File.READ)
+	var err = file.open(file_path, File.READ)
+	if err:
+		return
+	
 	var data = parse_json(file.get_as_text())
 	file.close()
 	set_data(data)
-	$LoadWindow.hide()
 
 func _on_Clear_pressed():
 	$ClearWindow.popup()

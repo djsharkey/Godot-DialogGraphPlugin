@@ -21,6 +21,7 @@ func _on_EditorInterface_selection_changed():
 	for node in selection.get_transformable_selected_nodes():
 		if node.get_script() and (node.get_script() == manager or node.get_script().get_base_script() == manager):
 			button.visible = true
+			editor.set_manager_ref(node)
 			break
 
 func _exit_tree():
