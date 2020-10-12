@@ -97,8 +97,7 @@ func update_json_file(file_path, data):
 func _on_Load_pressed():
 	$LoadWindow.popup()
 
-func _on_LoadWindow_confirmed():
-	var file_path = $LoadWindow.current_path
+func _on_LoadWindow_file_selected(file_path):
 	load_file(file_path)
 	$LoadWindow.hide()
 

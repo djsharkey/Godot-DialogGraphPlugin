@@ -16,7 +16,6 @@ func _enter_tree():
 	_on_EditorInterface_selection_changed()
 
 func _on_EditorInterface_selection_changed():
-	pass
 	button.visible = false
 	for node in selection.get_transformable_selected_nodes():
 		if node.get_script() and (node.get_script() == manager or node.get_script().get_base_script() == manager):
