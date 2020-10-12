@@ -1,9 +1,5 @@
 # [![Plugin icon](icon.png)](https://github.com/ejnij/Godot-DialogGraphPlugin) Dialog Graph Plugin for Godot
-I needed an easy way to create dialogs for my game. What I needed wasn't that complex, but I did a bit extra for future-proofing.
-This is the result - a simple plugin that lets you create dialog graphs.
-
-*Note: This plugin doesn't provide any functionality to display the dialog in-game. This is something you should do yourself!
-       I might add some basic example for reference if need be.
+Fork of the original - [ejnij/Godot-DialogGraphPlugin](https://github.com/ejnij/Godot-DialogGraphPlugin)
 
 ## Installation
 1) Create an 'addons' folder in your project folder if one doesn't already exist.
@@ -20,7 +16,7 @@ The plugin has two parts, the editor and the manager, but before that is explain
 Conversation is the starting point of a dialog graph. You can have multiple Conversations in a single file, but each of them has to have its own unique name.
 In every file there's only one Conversation that's set as the default one. This means it would be the default dialog graph that would start in that specific file, unless the Manager node is provided with a name of a different Conversation.
 #### Speech
-Speech is your NPCs' 'voice'. This is what they'd say in your dialog. If you use Godot's translations, you can press Enter once you enter a key code to display that line's translation in the box below. Sadly, this only works if you run the Editor as a scene, due to Godot's current implementation of translations.
+Speech is your NPCs' 'voice'. This is what they'd say in your dialog.
 #### Choice
 Choice is where your player replies. It lets you have multiple answers, with each being able to branch according to the response.
 #### Condition
@@ -47,12 +43,3 @@ The manager node is used to manage and communicate with the dialog graph you exp
 You can choose the exported dialog you created in the Manager node's view.
 It has signals for when it reaches a Speech node or a Choice node. Each providing the relevant dialog data as an Array of Strings.
 To inform it when a choice was chosen, you can use choice_picked(choice_index).
-
-## Bugs / Issues
-1. Translation being entered doesn't automatically scale the nodes. It does update when you Load though.
-2. The code for the Manager node is pretty hack-y and not OO-y. Might change that later.
-3. Graph validity isn't reinforced, so some stuff you can get away with while exporting, that would crash the Manager node.
-4. File dialogs require pressing the "Save/Load" button at the end and there might be an overwrite message for no reason as well.
-
-### Fixed
-1. Editor tab doesn't align with other tabs, and starts at 0 height.
