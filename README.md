@@ -1,4 +1,4 @@
-# [![Plugin icon](icon.png)](https://github.com/ejnij/Godot-DialogGraphPlugin) Dialog Graph Plugin for Godot
+# [![Plugin icon](src/icon.png)](https://github.com/ejnij/Godot-DialogGraphPlugin) Dialog Graph Plugin for Godot
 Fork of the original - [ejnij/Godot-DialogGraphPlugin](https://github.com/ejnij/Godot-DialogGraphPlugin)
 
 ## Installation

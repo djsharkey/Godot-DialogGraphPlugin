@@ -2,6 +2,11 @@ extends Node
 
 export (String, FILE, "*.json") var dialog_file = null
 
+enum ACTION_TYPES {
+	SPEECH,
+	CHOICE
+}
+
 var nodes = {}
 var conversations = {}
 var default_conversation = null
@@ -21,7 +26,6 @@ func parse_dialog_data():
 		var data = parse_json(file.get_as_text())
 		file.close()
 		for graph_node in data["nodes"]:
-			#var instance = load("res://addons/Godot-DialogGraphPlugin/src/" + data["nodes"][graph_node]["type"]).instance()
 			match data["nodes"][graph_node]["type"]:
 				"Conversation": create_conversation(data, graph_node)
 				"Speech": create_speech(data, graph_node)
@@ -37,17 +41,23 @@ func start_dialog(conversation = default_conversation):
 func continue_dialog():
 	process()
 
-func process():
-	if current:
-		match nodes[current]["type"]:
-				"Conversation": process_conversation()
-				"Speech": process_speech()
-				"Choice": process_choice()
-				"Condition": process_condition()
-				"Mux": process_mux()
-				"Jump": process_jump()
-	else:
-		emit_signal("dialog_finished")
+func process(conversation = default_conversation):
+	if !current:
+		current = conversations[conversation]
+	match nodes[current]["type"]:
+		"Conversation":
+			return process_conversation()
+		"Speech":
+			return process_speech()
+		"Choice":
+			return process_choice()
+		"Condition":
+			return process_condition()
+		"Mux":
+			return process_mux()
+		"Jump":
+			return process_jump()
+	return null # TODO: This should really log an error at this point
 
 func create_conversation(data, graph_node):
 	var next = null
@@ -59,8 +69,7 @@ func create_conversation(data, graph_node):
 		default_conversation = data["nodes"][graph_node]["Line0"]
 
 func process_conversation():
-	current = nodes[current]["next"]
-	process()
+	return move_to_node(nodes[current]["next"], true)
 
 func create_speech(data, graph_node):
 	var next = null
@@ -70,13 +79,17 @@ func create_speech(data, graph_node):
 	nodes[graph_node] = {"type": "Speech", "next": next, "size": size}
 	var speech = []
 	for i in range(size):
-		#nodes[graph_node]["speech" + String(i)] = data["nodes"][graph_node]["Line" + String(i)]
 		speech.append(data["nodes"][graph_node]["Line" + String(i)])
 	nodes[graph_node]["speech"] = speech
 
 func process_speech():
-	emit_signal("new_speech", nodes[current]["speech"])
-	current = nodes[current]["next"]
+	var lines = nodes[current]["speech"]
+	emit_signal("new_speech", lines)
+	move_to_node(nodes[current]["next"], false)
+	return {
+		"type": ACTION_TYPES.SPEECH,
+		"lines": lines,
+	}
 
 func create_choice(data, graph_node):
 	var size = data["nodes"][graph_node]["Size"]
@@ -91,16 +104,20 @@ func create_choice(data, graph_node):
 		nodes[graph_node]["next"] = next
 	var choice = []
 	for i in range(size):
-		#nodes[graph_node]["choice" + String(i)] = data["nodes"][graph_node]["Line" + String(i)]
 		choice.append(data["nodes"][graph_node]["Line" + String(i)])
 	nodes[graph_node]["choice"] = choice
 
 func process_choice():
+	var choice = nodes[current]["choice"]
 	emit_signal("new_choice", nodes[current]["choice"])
+	return {
+		"type": ACTION_TYPES.CHOICE,
+		"lines": choice,
+		"callback": funcref(self, "choice_picked")
+	}
 
-func choice_picked(choice):
-	current = nodes[current]["next"][choice]
-	process()
+func choice_picked(choice_idx):
+	return move_to_node(nodes[current]["next"][choice_idx], true)
 
 func create_condition(data, graph_node):
 	var next_true = null
@@ -119,10 +136,9 @@ func create_condition(data, graph_node):
 func process_condition():
 	var condition = get_parent().get_node(nodes[current]["path"]).get(nodes[current]["property"])
 	if condition:
-		current = nodes[current]["next_true"]
+		return move_to_node(nodes[current]["next_true"], true)
 	else:
-		current = nodes[current]["next_false"]
-	process()
+		return move_to_node(nodes[current]["next_false"], true)
 
 func create_mux(data, graph_node):
 	var next = null
@@ -131,14 +147,21 @@ func create_mux(data, graph_node):
 	nodes[graph_node] = {"type": "Mux", "next": next}
 
 func process_mux():
-	current = nodes[current]["next"]
-	process()
+	return move_to_node(nodes[current]["next"], true)
 
 func create_jump(data, graph_node):
 	var next = data["nodes"][graph_node]["Line0"]
 	nodes[graph_node] = {"type": "Jump", "to": next}
 
 func process_jump():
-	current = conversations[nodes[current]["to"]]
-	process_conversation()
-	
+	return move_to_node(conversations[nodes[current]["to"]], true)
+
+# move_to_node updates the current node reference to a new node if avaliable
+# if continue_processing is true the process function will also we invoked for this new node
+func move_to_node(node, continue_processing):
+	if !node:
+		emit_signal("dialog_finished")
+		return
+	current = node
+	if continue_processing:
+		return process()
