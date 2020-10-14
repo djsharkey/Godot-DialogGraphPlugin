@@ -64,9 +64,9 @@ func create_conversation(data, graph_node):
 	if data["sc"].has(graph_node):
 		next = data["sc"][graph_node]["0"]["to"]
 	nodes[graph_node] = {"type": "Conversation", "next": next}
-	conversations[data["nodes"][graph_node]["Line0"]] = graph_node
+	conversations[data["nodes"][graph_node]["Lines"][0]] = graph_node
 	if data["default_conversation"] == graph_node:
-		default_conversation = data["nodes"][graph_node]["Line0"]
+		default_conversation = data["nodes"][graph_node]["Lines"][0]
 
 func process_conversation():
 	return move_to_node(nodes[current]["next"], true)
@@ -77,10 +77,7 @@ func create_speech(data, graph_node):
 	if data["sc"].has(graph_node):
 		next = data["sc"][graph_node]["0"]["to"]
 	nodes[graph_node] = {"type": "Speech", "next": next, "size": size}
-	var speech = []
-	for i in range(size):
-		speech.append(data["nodes"][graph_node]["Line" + String(i)])
-	nodes[graph_node]["speech"] = speech
+	nodes[graph_node]["speech"] = data["nodes"][graph_node]["Lines"]
 
 func process_speech():
 	var lines = nodes[current]["speech"]
@@ -102,17 +99,14 @@ func create_choice(data, graph_node):
 			else:
 				next.append(null)
 		nodes[graph_node]["next"] = next
-	var choice = []
-	for i in range(size):
-		choice.append(data["nodes"][graph_node]["Line" + String(i)])
-	nodes[graph_node]["choice"] = choice
+	nodes[graph_node]["choices"] = data["nodes"][graph_node]["Lines"]
 
 func process_choice():
-	var choice = nodes[current]["choice"]
-	emit_signal("new_choice", nodes[current]["choice"])
+	var choices = nodes[current]["choices"]
+	emit_signal("new_choice", nodes[current]["choices"])
 	return {
 		"type": ACTION_TYPES.CHOICE,
-		"lines": choice,
+		"lines": choices,
 		"callback": funcref(self, "choice_picked")
 	}
 
@@ -150,7 +144,7 @@ func process_mux():
 	return move_to_node(nodes[current]["next"], true)
 
 func create_jump(data, graph_node):
-	var next = data["nodes"][graph_node]["Line0"]
+	var next = data["nodes"][graph_node]["Lines"][0]
 	nodes[graph_node] = {"type": "Jump", "to": next}
 
 func process_jump():

@@ -39,11 +39,14 @@ func get_data():
 		},
 	}
 	
+	var lines = []
 	if $NodeLineCount.visible:
 		data["Size"] = node_lines.size()
 	for i in range(0,node_lines.size()):
 		if node_lines[i].is_line_visible():
-			data["Line"+String(i)] = node_lines[i].get_data()
+			lines.append(node_lines[i].get_data())
+	if lines.size() > 0:
+		data["Lines"] = lines
 	return data
 
 func set_data(data):
@@ -54,7 +57,7 @@ func set_data(data):
 		change_node_lines_amount(data["Size"]-start_amount)
 	for i in range(0,node_lines.size()):
 		if node_lines[i].is_line_visible():
-			node_lines[i].set_data(data["Line"+String(i)])
+			node_lines[i].set_data(data["Lines"][i])
 
 func set_node_line(node_line):
 	pass
